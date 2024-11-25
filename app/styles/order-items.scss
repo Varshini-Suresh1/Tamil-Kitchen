@@ -1,0 +1,43 @@
+.order-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: $margin-medium;
+  
+    
+    th,
+    td {
+      border: 1px solid $box-border-color;
+      padding: $element-padding;
+      text-align: left;
+
+      
+    }
+    tr { 
+        input[type="number"] {
+            width: 150px;
+            height: 40px;
+            padding: 0.5rem;
+            border: 1px solid $box-border-color;
+            border-radius: 4px;
+            font-size: $font-size-medium;
+            text-align: center;
+            margin: 0.5rem;
+        }
+        
+      &:hover {
+        background-color: lighten($box-border-color, 30%);
+      }
+  
+      button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: $element-padding;
+        font-size: $font-size-medium;
+        margin-left: 0.5rem;
+        color: $primary-color;
+        transition: color $transition-duration ease;
+      }
+    }
+  }
+  

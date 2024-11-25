@@ -1,0 +1,39 @@
+.form-group {
+  margin-bottom: $margin-medium;
+  
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: $font-size-medium;
+    font-weight: 500;
+    color: $heading-color;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: $padding-small;
+    font-size: $font-size-small;
+    border: 1px solid $box-border-color;
+    border-radius: $border-radius;
+    transition: border-color $transition-duration ease;
+
+    &:focus {
+      border-color: $focus-border-color;
+      outline: none;
+    }
+  }
+  select,.input {
+    width: 100%;
+    padding: $element-padding;
+    font-size: $font-size-small;
+    border: 1px solid $box-border-color;
+    border-radius: $border-radius;
+    transition: border-color $transition-duration ease;
+  
+    &:focus {
+      outline: none;
+    }
+  }
+  
+}

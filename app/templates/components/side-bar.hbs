@@ -1,0 +1,78 @@
+<div id="nav-bar">
+  <div id="nav-header">
+    <a id="nav-title">TamilKitchen</a>
+  </div>
+
+  <div id="nav-content">
+    {{!-- Conditionally show based on user role '0' --}}
+    {{#if (eq userData.role 0)}}
+      {{!-- Display additional links only if `isFoodItemsRoute` is true --}}
+      {{#if isFoodItemsRoute}}
+        <div class="nav-button">
+          {{#link-to 'restaurants.fooditems' restaurantId class="nav-link-style"}}Food Items{{/link-to}}
+        </div>
+        <div class="nav-button">
+          {{#link-to 'restaurants.low-stock-food' restaurantId class="nav-link-style"}}Low Stock Foods{{/link-to}}
+        </div>
+        <div class="nav-button">
+          {{#link-to 'restaurants.orders-history' restaurantId class="nav-link-style"}}Orders{{/link-to}}
+        </div>
+      {{else}}
+        <div class="nav-button">
+          {{#link-to 'restaurants' class="nav-link-style"}}Restaurants{{/link-to}}
+        </div>
+        <div class="nav-button">
+          {{#link-to 'foodDetails' class="nav-link-style"}}Food Details{{/link-to}}
+        </div>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Conditionally show based on user role '1' --}}
+    {{#if (eq userData.role 1)}}
+      <div class="nav-button">
+        {{#link-to 'restaurants.fooditems' userData.restaurantId class="nav-link-style"}}Food Items{{/link-to}}
+      </div>
+      <div class="nav-button">
+        {{#link-to 'restaurants.low-stock-food' userData.restaurantId class="nav-link-style"}}Low Stock Foods{{/link-to}}
+      </div>
+      <div class="nav-button">
+        {{#link-to 'restaurants.orders-history' userData.restaurantId class="nav-link-style"}}Orders{{/link-to}}
+      </div>
+    {{/if}}
+
+    {{!-- Conditionally show based on user role '2' --}}
+    {{#if (eq userData.role 2)}}
+      <div class="nav-button">
+        {{#link-to 'restaurants' class="nav-link-style"}}Order Food{{/link-to}}
+      </div>
+      <div class="nav-button">
+        {{#link-to 'users.order-history' userData.userId class="nav-link-style"}}Order History{{/link-to}}
+      </div>
+      <div class="nav-button">
+        {{#link-to 'users.cart' userData.userId class="nav-link-style"}}Cart{{/link-to}}
+      </div>
+      <div class="nav-button">
+        {{#link-to 'users.addresses' userData.userId class="nav-link-style"}}Addresses{{/link-to}}
+      </div>
+      <div class="nav-button">
+        {{#link-to 'users.profile' userData.userId class="nav-link-style"}}Profile{{/link-to}}
+      </div>
+    {{/if}}
+
+    <div class="nav-button">
+      <button class="nav-link-style" {{action "showLogoutModal"}}>Logout</button>
+    </div>
+  </div>
+</div>
+
+<!-- Logout Confirmation Modal -->
+{{#if this.isLogoutModalOpen}}
+<div class="modal-overlay"></div>
+<div class="modal">
+  <div class="modal-content">
+    <h2>Are you sure you want to Logout?</h2>
+    <button {{action "logoutUser" }}>Yes</button>
+    <button {{action "closeLogoutModal" }}>No</button>
+  </div>
+</div>
+{{/if}}

@@ -1,0 +1,40 @@
+<div class="background-container">
+{{side-bar restaurantId=this.model.restaurant.id  isFoodItemsRoute=true}} <!-- Passing restaurantId to side-bar -->
+</div>
+
+<div class="list">
+    <div class="list-header">
+        <div class="left-section">
+            <button class="back-btn" {{action "goBack" }}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#000000">
+                    <path d="M700-80L280-500l420-420 80 80-340 340 340 340-80 80Z" />
+                </svg>
+            </button>
+            <h3 class="list-title">Orders History</h3>
+        </div>
+        <div class="status-container">
+            <label for="order-status-{{model.restaurant.id}}">Order Status:</label>
+            <select id="order-status-{{model.restaurant.id}}" onchange={{action "sendStatusToRoute" value="target.value"
+                }}>
+                <option value="">Select Status</option>
+                <option value="Accepted">Accepted</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Placed">Placed</option>
+            </select>
+        </div>
+    </div>
+    {{orders-component orders=model.restaurant.orders acceptOrder=(action 'acceptOrder') rejectOrder=(action
+    'rejectOrder') showActionButtons=true}}
+</div>
+{{#if showSuccessMessage}}
+<div class="success-popup">
+    {{responseMessage}}
+</div>
+{{/if}}
+
+{{#if showErrorMessage}}
+<div class="error-popup">
+    {{responseMessage}}
+</div>
+{{/if}}

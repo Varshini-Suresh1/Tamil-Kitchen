@@ -1,0 +1,21 @@
+{{log model}}
+<div class="page-container">
+  <h1>Access Denied</h1>
+  {{#if model}}
+    {{#if (eq model.role 0)}}
+      <p>You do not have access to this page. As an admin, you can navigate to the admin dashboard instead.</p>
+      <button {{action "goToAdminDashboard"}}>Go to Dashboard</button>
+    {{else if (eq model.role 1)}}
+      <p>You do not have access to this page. As a restaurant owner, please go to your dashboard for your options.</p>
+      <button {{action "goToResOwnerDashboard"}}>Go to Dashboard</button>
+    {{else if (eq model.role 2)}}
+      <p>You do not have access to this page. As a customer, you can return to your dashboard for available actions.</p>
+      <button {{action "goToCustomerDashboard"}}>Go to Dashboard</button>
+    {{else}}
+      <p>You do not have access to this page. As a guest, you can return to the home page.</p>
+      <button {{action "goUserDashboard"}}>Go Home</button>
+    {{/if}}
+  {{else}}
+    <p class="loading">Loading your access details, please wait...</p> 
+{{/if}}
+</div>

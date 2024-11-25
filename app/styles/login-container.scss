@@ -1,0 +1,39 @@
+.login-container {
+  display: flex;
+  margin: 50px auto;
+  width: 60%;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  overflow: hidden;
+  min-height: 700px;
+
+  .form-section {
+    width: 50%;
+    padding: $container-padding;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: $font-family;
+  }
+
+  .image-section {
+    width: 50%;
+    background: url('/client/images/Login.jpeg') no-repeat center center/cover;
+  }
+  
+  &.signup-page .image-section {
+    background: url('/client/images/Signup.jpeg') no-repeat center center/cover;  
+  }
+
+  .link {
+    padding: $padding-small;
+    text-align: center;
+    font-size: $font-size-small;
+    color: $primary-color;
+    transition: color $transition-duration;
+
+    &:hover {
+      color: darken($primary-color, 10%);
+    }
+  }
+}

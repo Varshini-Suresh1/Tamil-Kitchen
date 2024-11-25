@@ -1,0 +1,175 @@
+<div class="background-container">
+    {{side-bar}}
+</div>
+<div class="list">
+    <div class="list-header">
+        <div class="left-section">
+            <button class="back-btn" {{action "goBack" }}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#000000">
+                    <path d="M700-80L280-500l420-420 80 80-340 340 340 340-80 80Z" />
+                </svg>
+            </button>
+            <h3 class="list-title">Cart</h3>
+        </div>
+    </div>
+
+    <div class="orders">
+
+        <ul class="item-list">
+            {{#if errorMessage}}
+            <div class="error-message">{{errorMessage}}</div>
+            {{else if orders.length}}
+            {{#each orders as |order|}}
+            <li class="item">
+                <div class="details-container">
+                    <div class="detail">
+                        <strong>Order ID:</strong> {{order.orderId}}
+                    </div>
+                    <div class="detail">
+                        <strong>Added to cart:</strong>
+                        {{format-date order.orderDate}}
+                    </div>
+                    <div class="detail">
+                        <strong>Status:</strong>
+                        {{#if (eq order.isCompleted 0)}}
+                        In Cart
+                        {{else}}
+                        Unknown
+                        {{/if}}
+                    </div>
+                    <div class="detail">
+                        <strong>Restaurant Name:</strong> {{order.restaurantName}}
+                    </div>
+                    {{#if order.orderItems.length}}
+                    <table class="order-items-table">
+                        <thead>
+                            <tr>
+                                <th>Food Item Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each order.orderItems as |item|}}
+                            <tr>
+                                <td>{{item.foodItemName}}</td>
+                                <td>
+                                    <input type="number" placeholder="Enter new stock" value={{item.quantity}} min="1"
+                                        oninput={{action (mut item.quantity) value="target.value" }} />
+                                    <button class="edit-btn" {{action 'updateOrderItem' item}}> <svg
+                                            xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                            width="24px" fill="#000000">
+                                            <path
+                                                d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                                        </svg></button>
+                                    <button class="delete-btn" {{action 'deleteOrderItem' item}}><svg
+                                            xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                            width="24px" fill="#000000">
+                                            <path
+                                                d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg></button>
+                                </td>
+                                <td>{{format-number item.price}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                    {{else}}
+                    <p>No items found.</p>
+                    {{/if}}
+                </div>
+                <div class="btn-container-end">
+                    {{#if (and (eq userData.role 2) (eq order.isCompleted 0))}}
+                    <button {{action "proceedToPay" order}} class="btn">Proceed To Pay</button>
+                    <button {{action "removeCartOrder" order}} class="btn">Remove</button>
+                    {{/if}}
+                </div>
+            </li>
+            {{/each}}
+            {{else}}
+            <p class="no-items">No orders found.</p>
+            {{/if}}
+        </ul>
+
+    </div>
+</div>
+
+{{#if showSuccessMessage}}
+<div class="success-popup">
+    {{responseMessage}}
+</div>
+{{/if}}
+
+{{#if showErrorMessage}}
+<div class="error-popup">
+    {{responseMessage}}
+</div>
+{{/if}}
+
+{{#if showCheckoutModal}}
+<div class="modal-overlay" {{action "closeModal" }}>
+    <div class="modal checkout-modal shadow-lg rounded p-4">
+        <div class="modal-content">
+            <span class="close" {{action "closeModal" }}>&times;</span>
+
+            {{#if (and (eq userData.role 2) (eq selectedOrder.isCompleted 0))}}
+            <h2 class="text-center mb-4">Checkout</h2>
+            {{/if}}
+
+            {{#if (eq userData.role 2)}}
+            {{#unless (eq selectedOrder.isCompleted 0)}}
+            <h2 class="text-center mb-4">Payment Details</h2>
+            {{/unless}}
+            {{/if}}
+
+
+
+            <div class="order-summary p-3 border mb-4 rounded">
+                <div class="summary-row mb-2">
+                    <span class="label font-weight-bold">Total Amount:</span>
+                    <span class="value text-primary">{{format-number totalAmount}}</span>
+                </div>
+
+                {{#if (gt totalAmount 500)}}
+                <div class="summary-row mb-2">
+                    <span class="label font-weight-bold">Discount (30%):</span>
+                    <span class="value text-success">- {{format-number discount}}</span>
+                </div>
+                {{/if}}
+
+                <div class="summary-row mb-2">
+                    <span class="label font-weight-bold">Discounted Price:</span>
+                    <span class="value text-primary">{{format-number discountedPrice}}</span>
+                </div>
+
+                <hr />
+
+                <div class="summary-row mb-2">
+                    <span class="label font-weight-bold">Service Tax (10%):</span>
+                    <span class="value text-danger">+ {{format-number serviceTax}}</span>
+                </div>
+
+                <div class="summary-row mb-2">
+                    <span class="label font-weight-bold">Delivery Fee:</span>
+                    <span class="value text-danger">+ {{format-number deliveryFee}}</span>
+                </div>
+
+                <hr />
+
+                <div class="summary-row mb-2">
+                    <span class="label font-weight-bold h4">Final Price:</span>
+                    <span class="value font-weight-bold h4 text-success">{{format-number finalPrice}}</span>
+                </div>
+            </div>
+
+            {{#if (and (eq userData.role 2) (eq selectedOrder.isCompleted 0))}}
+            <div class="text-center">
+                <button {{action "confirmPayment" selectedOrder}} class="btn btn-primary btn-lg px-5">Confirm
+                    Payment</button>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
+{{/if}}

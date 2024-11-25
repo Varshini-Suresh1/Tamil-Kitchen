@@ -1,0 +1,309 @@
+.list {
+    margin: 0 auto;
+    max-width: 1200px;
+    margin-bottom: 3.5rem;
+
+
+    .list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $margin-medium;
+
+        .left-section {
+            display: flex;
+            align-items: center;
+
+            .back-btn {
+                margin-top: 23px;
+                margin-right: 1rem;
+                padding: $padding-small;
+                font-family: $font-family;
+                background: white;
+                border: none;
+                cursor: pointer;
+                transition: background-color $transition-duration, transform $transition-duration;
+    
+                &:hover {
+                    background-color: lighten($box-border-color, 30%);
+                    transform: scale(1.05);
+                }
+            }
+    
+            .list-title {
+                font-size: $font-size-large;
+                margin-top: 1rem;
+                font-weight: bold;
+                color: $heading-color;
+                text-align: center;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            }    
+        }
+        .status-container {
+            select {
+              margin-right: 10px;
+              padding: $element-padding;
+              background-color: white;
+              border: 1px solid $box-border-color;
+              border-radius: $border-radius;
+              transition: border-color $transition-duration;
+          
+              &:focus {
+                outline: none;
+              }
+          
+              option {
+                background-color: white;
+                color: black;
+          
+                &:hover {
+                  background-color: $primary-color;
+                  color: white;
+                }
+              }
+            }
+          }
+    }
+
+    
+    .add-btn {
+        background-color: $primary-color;
+        color: white;
+        padding: $padding-small;
+        border: none;
+        border-radius: $border-radius;
+        font-size: $font-size-medium;
+        cursor: pointer;
+        transition: background-color $transition-duration ease, transform $transition-duration;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+            transform: scale(1.05);
+        }
+    }
+
+    .item-list {
+        list-style: none;
+        padding: 0;
+
+        .item {
+            background:#f5f3f3;
+            padding: 1.5rem;
+            border-radius: $border-radius;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: box-shadow $transition-duration;
+
+            &:hover {
+                box-shadow: $box-shadow;
+            }
+
+            .details-container {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                margin-right: 1rem;
+
+                svg {
+                    margin-bottom: -5px;
+                }
+
+                button {
+                    background: none;
+                    cursor: pointer;
+                    align-self: flex-start;
+                    color: $primary-color;
+                    font-size: $font-size-medium;
+                    transition: color $transition-duration, transform $transition-duration;
+                    border: none;
+
+                    &:hover {
+                        color: darken($primary-color, 20%);
+                        transform: scale(1.05);
+                    }
+                }
+
+                .common-link-style {
+                    display: inline-block;
+                    padding: $element-padding;
+                    background-color: $primary-color;
+                    border: none;
+                    color: white;
+                    border-radius: $border-radius;
+                    text-decoration: none;
+                    transition: background-color $transition-duration;
+                    max-width: 110px;
+                    text-align: center;
+
+                    &:hover {
+                        background-color: darken($primary-color, 10%);
+                    }
+                }
+
+                .name-location {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 0.5rem;
+
+                    .restaurant-name {
+                        font-size: $font-size-medium;
+                        font-weight: bold;
+                    }
+
+                    .type,
+                    .rating {
+                        font-weight: bold;
+                    }
+                }
+
+                .detail {
+                    margin-bottom: 0.5rem;
+
+                    strong {
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            .btn-container-end {
+                display: flex;
+                align-items: flex-start;
+                gap: 30px;
+                margin-right:5rem;
+                
+                button {
+                    background: none;
+                    cursor: pointer;
+                    font-size: $font-size-medium;
+                    transition: color $transition-duration, transform $transition-duration;
+                    border: none;
+                    
+
+                    &.edit-btn {
+                        color: $success-color;
+                    }
+
+                    &.delete-btn {
+                        color: $error-color;
+                    }
+
+                    &.details-btn {
+                        color: $primary-color;
+                        border: none;
+                    }
+                    &.btn{
+                        color: $primary-color;
+                        margin-bottom: 20rem;
+                    }
+
+                    &:hover {
+                        color: darken($primary-color, 20%);
+                        transform: scale(1.05);
+                    }
+                }
+
+                input{
+                    padding: 3px;
+                    font-size: medium;
+                }
+            }
+
+            .default-label {
+                font-size: 0.875rem;
+                color: $box-border-color;
+                font-style: italic;
+            }
+        }
+
+        .no-items {
+            font-size: $font-size-medium;
+            color: darken($box-border-color, 30%);
+            text-align: center;
+            margin-top: $margin-medium;
+            font-style: italic;
+        }
+    }
+
+    .rating-input-container {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%); // Center it horizontally
+        color: $primary-color;
+        font-size: $font-size-small;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px; 
+
+        input {
+            width: 50px;
+            height: 25px;
+            margin: 0 10px;
+            padding: 2px;
+            text-align: center;
+            border: 1px solid $box-border-color;
+            border-radius: $border-radius;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: $primary-color;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: $font-size-small;
+            transition: background-color $transition-duration;
+
+            &:hover {
+                background-color: darken($primary-color, 10%);
+            }
+        }
+    }
+
+    .success-popup,
+    .error-popup {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: $padding-large;
+        border-radius: $border-radius;
+        color: white;
+        font-size: $font-size-small;
+        z-index: 1050;
+        text-align: center;
+        box-shadow: $box-shadow;
+
+        &.success-popup {
+            background: $success-color;
+        }
+
+        &.error-popup {
+            background: $error-color;
+        }
+    }
+}
+
+.full-width-btn {
+    display: block;
+    min-width: 1200px;
+    background-color: $primary-color;
+    color: white;
+    text-align: center;
+    padding: $element-padding;
+    border-radius: $border-radius;
+    text-decoration: none;
+    transition: background-color $transition-duration ease, transform $transition-duration;
+    position: fixed;
+    bottom: 0;
+
+    &:hover {
+        background-color: darken($primary-color, 10%);
+        transform: scale(1.05);
+    }
+}

@@ -1,0 +1,274 @@
+<div class="background-container">
+    {{side-bar restaurantId=this.model.restaurant.id isFoodItemsRoute=true}} <!-- Passing restaurantId to side-bar -->
+</div>
+
+<div class="list">
+    <div class="list-header">
+        <div class="left-section">
+            {{#if (or (eq userData.role 0) (eq userData.role 2))}}
+            <button class="back-btn" {{action "goBack" }}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#000000">
+                    <path d="M700-80L280-500l420-420 80 80-340 340 340 340-80 80Z" />
+                </svg>
+            </button>
+            {{/if}}
+            <h3 class="list-title">Food Items</h3>
+        </div>
+
+        {{#if (or (eq userData.role 0) (eq userData.role 1))}} <!--Add Button-->
+        <button class="add-btn" {{action "openAddFoodItemModal" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+            </svg>
+        </button>
+        {{/if}}
+    </div>
+
+    <ul class="item-list">
+        {{#if foodItems.length}}
+        {{#each foodItems as |foodItem|}}
+        <li class="item">
+            <div class="details-container">
+                <div class="detail">
+                    <strong>Name:</strong> {{foodItem.foodDetails.name}}
+                </div>
+                {{#unless (eq userData.role 2) }}
+                <div class="detail">
+                    <strong>Stock:</strong> {{foodItem.stock}}
+                </div>
+                <div class="detail">
+                    <strong>Sold Quantity:</strong> {{foodItem.soldQuantity}}
+                </div>
+                {{/unless}}
+                <div class="detail">
+                    <strong>Price:</strong> {{foodItem.price}}
+                </div>
+                <div class="detail">
+                    <strong>Veg:</strong> {{if foodItem.foodDetails.isVeg "Yes" "No"}}
+                </div>
+                <div class="detail">
+                    <strong>Type:</strong> {{#if (eq foodItem.foodDetails.type 1)}}Starter
+                    {{else if (eq foodItem.foodDetails.type 2)}}Main Course
+                    {{else if (eq foodItem.foodDetails.type 3)}}Drinks
+                    {{else}}Unknown
+                    {{/if}}
+                </div>
+                {{#if foodItem.quantity}}
+                <div class="detail">
+                    <strong>Quantity in Cart:</strong> {{foodItem.quantity}}
+                </div>
+                {{/if}}
+            </div>
+            {{#if (or (eq userData.role 0) (eq userData.role 1))}}
+            <div class="btn-container-end">
+                <button {{action "openEditModal" foodItem}} class="edit-btn"><svg xmlns="http://www.w3.org/2000/svg"
+                        height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                        <path
+                            d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                    </svg></button>
+                <button {{action "openDeleteModal" foodItem}} class="delete-btn"><svg xmlns="http://www.w3.org/2000/svg"
+                        height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                        <path
+                            d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720..." />
+                    </svg></button>
+            </div>
+            {{/if}}
+            {{#if (eq userData.role 2) }}
+            <div class="btn-container-end">
+                <button {{action "handleAddToCart" foodItem}} class="details-btn">ADD</button>
+                <button {{action "removeFromCart" foodItem}} class="details-btn">REMOVE</button>
+            </div>
+            {{/if}}
+        </li>
+        {{/each}}
+        {{else}}
+        <p class="no-items">No food items available.</p>
+        {{/if}}
+    </ul>
+    {{#if (eq userData.role 2) }}
+
+    {{#link-to 'users.cart' userData.userId class="full-width-btn"}}View Cart{{/link-to}}
+
+    {{/if}}
+
+</div>
+
+
+<!-- Add Food Item Modal -->
+{{#if isAddModalOpen}}
+<div class="modal-overlay"></div>
+<div class="modal">
+    <div class="modal-content">
+        <span class="close" {{action "closeAddFoodItemModal" }}>&times;</span>
+        <h2>Add Food Item</h2>
+
+        <!-- Toggle for selecting existing or adding new food item -->
+        <div class="form-group">
+            <label for="food-detail-option">Food Item Option:</label>
+            <select id="food-detail-option" onchange={{action "toggleFoodDetailOption" value="target.value" }}>
+                <option value="false">Select from Existing</option>
+                <option value="true">Add New Food Detail</option>
+            </select>
+        </div>
+
+        {{#if isAddingNewFoodDetail}}
+        <!-- Form to add new food details -->
+        <form {{action "addNewFoodDetail" on="submit" }}>
+            <div class="form-group">
+                <label for="food-name">Food Name:</label>
+                <input type="text"  class="input" id="food-name" placeholder="Enter Food Name" value={{newFoodDetail.name}}
+                    oninput={{action (mut newFoodDetail.name) value="target.value" }} required>
+            </div>
+
+            <div class="form-group">
+                <label for="food-type">Type:</label>
+                <select id="food-type" value={{newFoodDetail.type}} onchange={{action (mut newFoodDetail.type)
+                    value="target.value" }} required>
+                    <option value="">Select Food Type</option> <!-- Default option -->
+                    <option value="1">Starter</option>
+                    <option value="2">Main Course</option>
+                    <option value="3">Drinks</option>
+                </select>
+            </div>
+
+            {{#unless isVegRestaurant}} <!-- Only show vegetarian options if restaurant is non-veg -->
+            <div class="form-group">
+                <label>Vegetarian:</label><br>
+                <input type="radio" id="is-veg" name="foodType" value="true" checked={{eq newFoodDetail.isVeg true}}
+                    onchange={{action (mut newFoodDetail.isVeg) true }}>
+                Veg
+
+                <input type="radio" id="is-non-veg" name="foodType" value="false" checked={{eq newFoodDetail.isVeg
+                    false}} onchange={{action (mut newFoodDetail.isVeg) false }}>
+                Non-Veg
+            </div>
+            {{/unless}}
+
+
+            <div class="form-group">
+                <label for="food-stock">Stock:</label>
+                <input type="number"  class="input" id="food-stock" placeholder="Stock" value={{newFoodDetail.stock}} oninput={{action
+                    (mut newFoodDetail.stock) value="target.value" }} required>
+            </div>
+
+            <div class="form-group">
+                <label for="food-price">Price:</label>
+                <input type="number"  class="input" id="food-price" placeholder="Price" step="0.01" value={{newFoodDetail.price}}
+                    oninput={{action (mut newFoodDetail.price) value="target.value" }} required>
+            </div>
+
+            <button type="submit" class="btn-primary">Add Food Detail</button>
+        </form>
+        {{else}}
+        <!-- Existing select food details form -->
+        <form {{action "addFoodItem" on="submit" }}>
+            <div class="form-group">
+                <label for="food-details">Select Food Detail</label>
+                <div class="search-dropdown">
+                    <button {{action "toggleFoodDetailDropdown" }} class="dropdown-toggle">
+                        {{if selectedFoodDetail.name selectedFoodDetail.name "Select Food Detail"}}
+                    </button>
+
+                    {{#if isFoodDetailDropdownOpen}}
+                    <div class="dropdown-menu">
+                        <!-- Search Input Inside Dropdown -->
+                        <input type="text" placeholder="Search food detail" value={{foodDetailSearchQuery}}
+                            oninput={{action (mut foodDetailSearchQuery) value="target.value" }} />
+
+                        <!-- Filtered Food Details List -->
+                        <div class="item-list">
+                            {{#if filteredFoodDetails.length}}
+                            {{#each filteredFoodDetails as |foodDetail|}}
+                            <div class="option" {{action "selectFoodDetail" foodDetail}}>
+                                {{foodDetail.name}}
+                            </div>
+                            {{/each}}
+                            {{else}}
+                            <div class="no-readers">No food details found</div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+
+
+            <!-- Ensure stock and price are entered before form submission -->
+            <div class="form-group">
+                <label for="food-stock">Stock:</label>
+                <input type="number"  class="input" id="food-stock" placeholder="Stock" value={{newFoodItem.stock}} oninput={{action
+                    (mut newFoodItem.stock) value="target.value" }} required>
+            </div>
+
+            <div class="form-group">
+                <label for="food-price">Price:</label>
+                <input type="number"  class="input" id="food-price" placeholder="Price" step="0.01" value={{newFoodItem.price}}
+                    oninput={{action (mut newFoodItem.price) value="target.value" }} required>
+            </div>
+
+            <button type="submit" class="btn-primary">Add Food Item</button>
+        </form>
+        {{/if}}
+    </div>
+</div>
+{{/if}}
+
+
+
+<!-- Update Food Item Modal -->
+{{#if this.isEditModalOpen}}
+<div class="modal-overlay"></div>
+<div class="modal">
+    <div class="modal-content">
+        <span class="close" {{action "closeEditModal" }}>&times;</span>
+        <h4>Edit Food Item</h4>
+        <form {{action "editFoodItem" on="submit" }}>
+            <div class="form-group">
+                <label>Stock:</label>
+                <input type="number"  class="input" placeholder="Stock" value={{this.editedFoodItem.stock}} onInput={{action (mut
+                    this.editedFoodItem.stock) value="target.value" }} required>
+            </div>
+            <div class="form-group">
+                <label>Price:</label>
+                <input type="number"  class="input" placeholder="Price" value={{this.editedFoodItem.price}} onInput={{action (mut
+                    this.editedFoodItem.price) value="target.value" }} step="0.01" required>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{/if}}
+
+
+
+<!-- Modal to delete the food item -->
+{{#if this.isDeleteModalOpen}}
+<div class="modal-overlay"></div>
+<div class="modal">
+    <div class="modal-content">
+        <span class="close" {{action "closeDeleteModal" }}>&times;</span>
+        <h2>Are you sure you want to permenantly delete this food item?</h2>
+        <button {{action "deleteFoodItem" }}>Delete</button>
+        <button {{action "closeDeleteModal" }}>Cancel</button>
+    </div>
+</div>
+
+
+
+
+{{/if}}
+{{#if showSuccessMessage}}
+<div class="success-popup">
+    {{responseMessage}}
+</div>
+{{/if}}
+
+{{#if showErrorMessage}}
+<div class="error-popup">
+    {{responseMessage}}
+</div>
+{{/if}}

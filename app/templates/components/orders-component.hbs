@@ -1,0 +1,189 @@
+<div class="orders">
+  <ul class="item-list">
+    {{#if errorMessage}}
+    <div class="error-message">{{errorMessage}}</div> <!-- Display error message if any -->
+    {{else if orders.length}}
+    {{#each orders as |order|}}
+    <li class="item">
+
+      <div class="details-container">
+        <div class="detail">
+          <strong>Order ID:</strong> {{order.orderId}}
+        </div>
+        {{#if (eq userData.role 0)}}
+        <div class="detail">
+          <strong>User ID:</strong> {{order.userId}}
+        </div>
+        {{/if}}
+        <div class="detail">
+          {{#if (eq order.isCompleted 0)}}
+          <strong>Added to cart:</strong>
+          {{else}}
+          <strong>Order Date:</strong>
+          {{/if}}
+          {{format-date order.orderDate}}
+        </div>
+        <div class="detail">
+          <strong>Status:</strong>
+          {{#if (eq order.isCompleted 0)}}
+          In Cart
+          {{else if (eq order.isCompleted 1)}}
+          Placed
+          {{else if (eq order.isCompleted 2)}}
+          Accepted
+          {{else if (eq order.isCompleted -1)}}
+          Rejected
+          {{else}}
+          Unknown
+          {{/if}}
+        </div>
+        {{#if (eq order.isCompleted 2)}}
+        <div class="detail">
+          <strong>Rating:</strong> {{if order.rating (format-number order.rating) "No Rating"}}
+        </div>
+        {{/if}}
+        {{#if (eq userData.role 2)}}
+        <div class="detail">
+          <strong>Restaurant Name:</strong> {{order.restaurantName}}
+        </div>
+        {{/if}}
+        {{#unless (eq order.isCompleted 0)}}
+        <div class="detail">
+          <strong>Address:</strong> {{order.address}}, {{order.location}}
+        </div>
+        {{/unless}}
+
+        <!-- Display order items below the order details -->
+        {{#if order.orderItems.length}}
+        <table class="order-items-table">
+          <thead>
+            <tr>
+              <th>Food Item Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each order.orderItems as |item|}}
+            <tr>
+              <td>{{item.foodItemName}}</td>
+              <td>{{item.quantity}}</td>
+              <td>{{format-number item.price}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        {{else}}
+        <p>No items found for this order.</p>
+        {{/if}}
+        {{#if (and (eq userData.role 2) (eq order.isCompleted 2) (eq order.rating 0))}}
+        <div class="detail">
+          <label for="rating-{{order.orderId}}"><strong>Rate this Order:</strong></label>
+          <input type="number" id="rating-{{order.orderId}}" value={{order.newRating}} min="1" max="5" step="0.5">
+          <button {{action "submitRating" order}}>Submit</button>
+        </div>
+        {{/if}}
+      </div>
+
+      <div class="btn-container-end">
+        {{#if (and (or (eq userData.role 0) (eq userData.role 1)) (eq order.isCompleted 1))}}
+        <!-- Conditionally show Accept and Reject buttons -->
+        <button {{action "acceptOrder" order}} class="btn">Accept</button>
+        <button {{action "rejectOrder" order}} class="btn">Reject</button>
+        {{/if}}
+      </div>
+      <div class="btn-container-end">
+        {{#if (eq userData.role 2)}}
+        {{#unless (eq order.isCompleted 0)}}
+        <button {{action "paymentDetails" order}} class="btn">Payment details</button>
+        {{/unless}}
+        {{/if}}
+      </div>
+
+    </li>
+
+    {{/each}}
+    {{else}}
+    <p class="no-items">No orders found.</p>
+    {{/if}}
+  </ul>
+
+</div>
+{{#if showSuccessMessage}}
+<div class="success-popup">
+  {{responseMessage}}
+</div>
+{{/if}}
+
+{{#if showErrorMessage}}
+<div class="error-popup">
+  {{responseMessage}}
+</div>
+{{/if}}
+
+
+{{#if showCheckoutModal}}
+<div class="modal-overlay" {{action "closeModal" }}>
+  <div class="modal checkout-modal shadow-lg rounded p-4">
+    <div class="modal-content">
+      <span class="close" {{action "closeModal" }}>&times;</span>
+
+      {{#if (and (eq userData.role 2) (eq selectedOrder.isCompleted 0))}}
+      <h2 class="text-center mb-4">Checkout</h2>
+      {{/if}}
+
+      {{#if (eq userData.role 2)}}
+      {{#unless (eq selectedOrder.isCompleted 0)}}
+      <h2 class="text-center mb-4">Payment Details</h2>
+      {{/unless}}
+      {{/if}}
+
+
+      <div class="order-summary p-3 border mb-4 rounded">
+        <div class="summary-row mb-2">
+          <span class="label font-weight-bold">Total Amount:</span>
+          <span class="value text-primary">{{format-number totalAmount}}</span>
+        </div>
+
+        {{#if (gt totalAmount 500)}}
+        <div class="summary-row mb-2">
+          <span class="label font-weight-bold">Discount (30%):</span>
+          <span class="value text-success">- {{format-number discount}}</span>
+        </div>
+        {{/if}}
+
+        <div class="summary-row mb-2">
+          <span class="label font-weight-bold">Discounted Price:</span>
+          <span class="value text-primary">{{format-number discountedPrice}}</span>
+        </div>
+
+        <hr />
+
+        <div class="summary-row mb-2">
+          <span class="label font-weight-bold">Service Tax (10%):</span>
+          <span class="value text-danger">+ {{format-number serviceTax}}</span>
+        </div>
+
+        <div class="summary-row mb-2">
+          <span class="label font-weight-bold">Delivery Fee:</span>
+          <span class="value text-danger">+ {{format-number deliveryFee}}</span>
+        </div>
+
+        <hr />
+
+        <div class="summary-row mb-2">
+          <span class="label font-weight-bold h4">Final Price:</span>
+          <span class="value font-weight-bold h4 text-success">{{format-number finalPrice}}</span>
+        </div>
+      </div>
+
+      {{#if (and (eq userData.role 2) (eq selectedOrder.isCompleted 0))}}
+      <div class="text-center">
+        <button {{action "confirmPayment" selectedOrder}} class="btn btn-primary btn-lg px-5">Confirm
+          Payment</button>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+{{/if}}

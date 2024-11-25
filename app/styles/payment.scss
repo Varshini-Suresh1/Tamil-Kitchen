@@ -1,0 +1,24 @@
+.order-summary {
+  .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: $margin-medium;
+
+      .label {
+          margin-right: 20px;
+      }
+
+      .value {
+          margin-left: auto;
+      }
+  }
+
+  hr {
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+  }
+
+  .final-price {
+      margin-top: 1.5rem;
+  }
+}

@@ -5,7 +5,7 @@ module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'tamil-kitchen-app',
     environment,
-    rootURL: '/',
+    rootURL: '/tamil_kitchen/',
     locationType: 'auto',
     EmberENV: {
       FEATURES: {

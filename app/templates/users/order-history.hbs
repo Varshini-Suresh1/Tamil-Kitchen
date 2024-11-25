@@ -1,0 +1,22 @@
+<div class="background-container">
+{{side-bar}}
+</div>
+<div class="list">
+    <div class="list-header">
+        <div class="left-section">
+        <h3 class="list-title">Order History</h3>
+        </div>
+    </div>
+    {{orders-component orders=model.user.orders submitRating=(action "submitRating")}}
+</div>
+{{#if showSuccessMessage}}
+<div class="success-popup">
+    {{responseMessage}}
+</div>
+{{/if}}
+
+{{#if showErrorMessage}}
+<div class="error-popup">
+    {{responseMessage}}
+</div>
+{{/if}}

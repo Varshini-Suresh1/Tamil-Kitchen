@@ -1,0 +1,154 @@
+.modal {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; // Ensures the modal is above other content
+  width: 80%;
+  max-width: 500px;
+  background-color: white;
+  padding: $container-padding;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+}
+
+.modal-content {
+  padding: $container-padding;
+
+  button {
+    display: inline-block;
+    padding: $element-padding;
+    background-color: $primary-color;
+    color: white;
+    border-radius: $border-radius;
+    text-decoration: none;
+    transition: background-color $transition-duration ease;
+    min-width: 110px;
+    font-family: $font-family;
+    font-size: $font-size-small;
+  }
+
+  button:hover {
+    background-color: darken($primary-color, 10%);
+  }
+
+  .search-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    padding: $padding-small;
+    font-size: $font-size-small;
+    border: 1px solid $box-border-color;
+    border-radius: $border-radius;
+    transition: border-color $transition-duration ease;
+
+    &:focus {
+      border-color: $focus-border-color;
+      outline: none;
+    }
+
+    .dropdown-toggle {
+      background: white;
+      color: gray;
+      padding: 10px;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      border: none;
+      padding: 0px;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border: 1px solid #ddd;
+      width: 100%;
+      max-width: 5000px;
+      z-index: 1000;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      overflow-y: auto;
+
+
+      input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        color: black;
+      }
+
+      .item-list {
+        max-height: 150px; // Set max height for scrolling
+        overflow-y: auto; // Enable vertical scroll if content overflows
+        border-top: 1px solid #ddd;
+        margin-top: 8px;
+        padding: 0;
+
+        .option {
+          padding: 8px 12px;
+          cursor: pointer;
+          font-size: 14px;
+          color: #333;
+          background-color: #fff;
+
+          &:hover {
+            background-color: #f1f1f1;
+          }
+
+          &+.option {
+            border-top: 1px solid #eee;
+          }
+        }
+      }
+    }
+  }
+}
+
+.modal .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: $font-size-large;
+  cursor: pointer;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999; // Ensures the overlay is behind the modal but above the content
+}
+
+// Popups
+.success-popup,
+.error-popup {
+  position: fixed;
+  color: white;
+  padding: $element-padding $container-padding;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  z-index: 1000;
+  font-family: $font-family;
+}
+
+.success-popup {
+  background-color: $success-color;
+  bottom: $margin-medium;
+  right: $margin-medium;
+}
+
+.error-popup {
+  background-color: $error-color;
+  top: $margin-medium;
+  right: $margin-medium;
+}

@@ -1,0 +1,77 @@
+<div class="background-container">
+  {{side-bar restaurantId=this.model.restaurant.id isFoodItemsRoute=true}} <!-- Passing restaurantId to side-bar -->
+</div>
+
+<div class="list">
+  <div class="list-header">
+    <div class="left-section">
+
+      <button class="back-btn" {{action "goBack" }}>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+          <path d="M700-80L280-500l420-420 80 80-340 340 340 340-80 80Z" />
+        </svg>
+      </button>
+
+      <h3 class="list-title">Low Stock Food Items</h3>
+    </div>
+  </div>
+
+  <ul class="item-list">
+    {{#if model.restaurant.foodItems.length}}
+    {{#each model.restaurant.foodItems as |foodItem|}}
+    <li class="item">
+      <div class="details-container">
+        <div class="detail">
+          <strong>Name:</strong> {{foodItem.foodDetails.name}}
+        </div>
+        <div class="detail">
+          <strong>Stock:</strong> {{foodItem.stock}}
+        </div>
+        <div class="detail">
+          <strong>Sold Quantity:</strong> {{foodItem.soldQuantity}}
+        </div>
+        <div class="detail">
+          <strong>Price:</strong> {{foodItem.price}}
+        </div>
+        <div class="detail">
+          <strong>Veg:</strong> {{if foodItem.foodDetails.isVeg "Yes" "No"}}
+        </div>
+        <div class="detail">
+          <strong>Type:</strong> {{#if (eq foodItem.foodDetails.type 1)}}Starter
+          {{else if (eq foodItem.foodDetails.type 2)}}Main Course
+          {{else if (eq foodItem.foodDetails.type 3)}}Drinks
+          {{else}}Unknown
+          {{/if}}
+        </div>
+        
+        
+      </div>
+      <div class="btn-container-end">
+        <input type="number"  placeholder="Enter new stock" value={{foodItem.newStock}} min="0" oninput={{action (mut
+          foodItem.newStock) value="target.value" }} />
+
+        <button class="details-btn" {{action 'updateFoodItemStock' foodItem}} class="details-btn">
+          Update Stock
+        </button>
+      </div>
+
+    </li>
+    {{/each}}
+    {{else}}
+    <p class="no-items">No food items with stock less than 10 found.</p>
+    {{/if}}
+
+  </ul>
+</div>
+
+{{#if showSuccessMessage}}
+<div class="success-popup">
+  {{responseMessage}}
+</div>
+{{/if}}
+
+{{#if showErrorMessage}}
+<div class="error-popup">
+  {{responseMessage}}
+</div>
+{{/if}}

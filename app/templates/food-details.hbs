@@ -1,0 +1,93 @@
+<div class="background-container">
+    {{side-bar}}
+</div>
+<div class="list">
+    <div class="list-header">
+        <div class="left-section">
+            <h3 class="list-title">Food Details</h3>
+        </div>
+        <button class="add-btn" {{action "openAddFoodDetailModal" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+            </svg>
+        </button>
+    </div>
+
+    <ul class="item-list">
+        {{#if foodDetails.length}}
+        {{#each foodDetails as |foodDetails|}}
+        <li class="item">
+            <div class="details-container">
+                <div class="detail"><strong>Food Details ID:</strong> {{foodDetails.foodDetailsID}}</div>
+                <div class="detail"><strong>Name:</strong> {{foodDetails.name}}</div>
+                <div class="detail"><strong>Type:</strong> 
+                    {{#if (eq foodDetails.type 1)}}Starter
+                    {{else if (eq foodDetails.type 2)}}Main Course
+                    {{else if (eq foodDetails.type 3)}}Drinks
+                    {{else}}Unknown
+                    {{/if}}
+                </div>
+                <div class="detail"><strong>Is Veg:</strong> {{if foodDetails.isVeg "Yes" "No"}}</div>
+            </div>
+        </li>
+        {{/each}}
+        {{else}}
+        <p class="no-items">No food details found.</p>
+        {{/if}}
+    </ul>
+</div>
+
+
+
+<!-- Add Food Details Modal -->
+{{#if this.isAddFoodDetailModalOpen}}
+<div class="modal-overlay"></div>
+<div class="modal">
+    <div class="modal-content">
+        <span class="close" {{action "closeAddFoodDetailModal" }}>&times;</span>
+        <h2>Add Food Detail</h2>
+        <form {{action "addFoodDetail" on="submit" }}>
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" class="form-control" placeholder="Enter Food Name" value={{this.newFoodDetails.name}} oninput={{action (mut this.newFoodDetails.name) value="target.value" }} required>
+            </div>
+            <div class="form-group">
+                <label>Type:</label>
+                <select value={{this.newFoodDetails.type}} onchange={{action (mut this.newFoodDetails.type) value="target.value" }} required>
+                    <option value="">Select Food Type</option> <!-- Default option -->
+                    <option value="1">Starter</option>
+                    <option value="2">Main Course</option>
+                    <option value="3">Drinks</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Vegetarian:</label>
+                <div>
+                    <label>
+                        <input type="radio" name="vegOption" value="true" 
+                            onchange={{action (mut this.newFoodDetails.isVeg) true}}>
+                        Veg
+                    </label>
+                    <label>
+                        <input type="radio" name="vegOption" value="false"
+                            onchange={{action (mut this.newFoodDetails.isVeg) false}}>
+                        Non-Veg
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary">Add Food Detail</button>
+        </form>
+    </div>
+</div>
+{{/if}}
+{{#if showSuccessMessage}}
+<div class="success-popup">
+    {{responseMessage}}
+</div>
+{{/if}}
+
+{{#if showErrorMessage}}
+<div class="error-popup">
+    {{responseMessage}}
+</div>
+{{/if}}

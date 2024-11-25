@@ -1,0 +1,42 @@
+<div class="login-container  signup-page ">
+ <div class="image-section"></div> <!-- Right section for the image -->
+  <div class="form-section"> <!-- Left section for the form -->
+    <h2>Create Account</h2>
+    <form id="signupForm" {{action "signup" on="submit"}}>
+        <div class="form-group">
+        <label for="username">Username (Email)</label>
+        <input type="email" class="form-control" id="username" placeholder="Enter your email" required value={{this.newUsername}} oninput={{action "setNewUsername" value="target.value"}}>
+        </div>
+        <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter your name" required value={{this.newName}} oninput={{action "setNewName" value="target.value"}}>
+        </div>
+        <div class="form-group">
+        <label for="mobileNo">Mobile Number</label>
+        <input type="tel" class="form-control" id="mobileNo" placeholder="Enter your mobile number" required value={{this.newMobileNo}} oninput={{action "setNewMobileNo" value="target.value"}}>
+        </div>
+        <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Enter your password" required value={{this.newPassword}} oninput={{action "setNewPassword" value="target.value"}}>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <div class="link">
+        <p>Already have an account? {{#link-to 'login' class="nav-link-style"}}Login{{/link-to}}</p> 
+        </div>
+    </div>
+</div>
+
+
+{{#if showSuccessMessage}}
+<div class="success-popup">
+    {{responseMessage}}
+</div>
+{{/if}}
+
+{{#if showErrorMessage}}
+<div class="error-popup">
+    {{responseMessage}}
+</div>
+{{/if}}
+

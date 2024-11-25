@@ -1,0 +1,83 @@
+<div class="background-container">
+{{side-bar}}
+</div>
+<div class="list">
+    <div class="list-header">
+        <div class="left-section">
+        <h1 class="list-title">User Profile</h1>
+        </div>
+    </div>
+
+    {{#if model.profile}}
+
+    <ul class="item-list">
+        <li class="item">
+            <div class="details-container">
+                <div class="detail">
+                    <strong>Name:</strong> {{model.profile.name}}
+                </div>
+                <div class="detail">
+                    <strong>Username:</strong> {{model.profile.username}}
+                </div>
+                <div class="detail">
+                    <strong>Mobile No:</strong> {{model.profile.mobileNo}}
+                </div>
+                <div class="detail">
+                    <strong>Default Address:</strong>
+                    {{#if model.defaultAddress}}
+                        {{model.defaultAddress.address}}, {{model.defaultAddress.location}}
+                    {{else}}
+                    <em>No default address.
+                        <span>{{#link-to 'users.addresses' model.profile.userId}}Add Default
+                            Addresses{{/link-to}}</span>
+                    </em>
+                    {{/if}}
+                </div>
+                 <button {{action "openChangePasswordModal" }} class="password-btn">Change Password</button>
+            </div>
+               
+            
+        </li>
+    </ul>
+
+    {{else}}
+    <p class="no-items">No user profile found.</p>
+    {{/if}}
+
+
+    <!-- Change Password Modal -->
+    {{#if isChangePasswordModalOpen}}
+    <div class="modal-overlay">
+    <div class="modal">
+        <div class="modal-content">
+            <span class="close" {{action "closeChangePasswordModal" }}>&times;</span>
+            <h2>Change Password</h2>
+            <form {{action "changePassword" on="submit" }}>
+                <div class="form-group">
+                    <label>Old Password:</label>
+                    {{input value=oldPassword type="password" placeholder="Enter old password"  class="input"}}
+                </div>
+                <div class="form-group">
+                    <label>New Password:</label>
+                    {{input value=newPassword type="password" placeholder="Enter new password"  class="input"}}
+                </div>
+                <button type="submit">Change Password</button>
+            </form>
+        </div>
+    </div>
+    </div>
+    {{/if}}
+</div>
+
+
+    {{#if showSuccessMessage}}
+    <div class="success-popup">
+        {{responseMessage}}
+    </div>
+    {{/if}}
+
+    {{#if showErrorMessage}}
+    <div class="error-popup">
+        {{responseMessage}}
+    </div>
+    {{/if}}
