@@ -26,7 +26,6 @@ public class CORSFilter implements Filter {
             return;
         }   
 
-        // Continue with the existing filter logic for other requests
         chain.doFilter(request, response);
     }
 
